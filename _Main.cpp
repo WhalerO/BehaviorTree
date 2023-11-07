@@ -157,6 +157,7 @@ int main()
     }
     cout << "共执行往返灭火架次：" << tanker->GetFlightRec() << endl;
     cout << "消防共耗时：" << timeRec << "分钟" << endl;
+    cout << "加油次数：" << tanker->GetReFuelRec() << endl;
 
     return 0;
 }

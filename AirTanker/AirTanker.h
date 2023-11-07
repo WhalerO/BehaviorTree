@@ -46,6 +46,8 @@ private:
 
     //往返架次纪录
     int flightRec = 0;
+    //加油次数纪录
+    int reFuelRec = 0;
     //时间记录：加油时间
     float reFuelTimeRec = 0;
     //时间记录：整备时间
@@ -81,6 +83,8 @@ public:
     inline void SetWildFire(WildFire* fire){wildFire = fire;};
     //输出架次纪录
     inline int GetFlightRec(){return flightRec;};
+    //输出加油次数
+    inline int GetReFuelRec(){return reFuelRec;};
     //设置仿真步长
     inline static void SetTimeStep(float step){timeStep = step;};
 

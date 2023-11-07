@@ -16,6 +16,7 @@ void AirTanker::Update()
             reFuelTimeRec = 0;
             fuelWeight = fuelCapacity;
             isFuelRemain = true;
+            reFuelRec++;
         }
         else{
             reFuelTimeRec += WildFire::timeStep;
