@@ -23,7 +23,7 @@ private:
     //火场半径
     float fireRadius = 0;
     //火场环宽度
-    float fireWidth = 100;
+    float fireWidth = 20;
     //火场中心位置
     Position fireCenter;
     //火场蔓延速度
@@ -48,7 +48,7 @@ private:
     float slope = 0;
     //蔓延速度系数
     float speedCoefficient = 0;
-    //GPC标准
+    //GPC标准（加仑每百平方英尺）
     float GPC = 4;
     //火场可燃物类型
     VegetationType vegetationType = Pine;
@@ -74,12 +74,16 @@ public:
     //仿真计算步长(min)
     static float timeStep;
 
+    //设置火场位置
+    inline void SetFireCenter(Position center){fireCenter = center;};
     //设置仿真步长
     inline static void SetTimeStep(float step){timeStep = step;};
     //获得火场面积
     inline float GetFireArea(){return totalArea;};
     //获得火场面积
     inline float GetFireRadius(){return fireRadius;};
+    //获得扑灭火环百分比
+    inline float GetFireSurpressPercent(){return fireSurpressPercent;};
 
     //执行仿真更新
     void Update();

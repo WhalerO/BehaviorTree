@@ -9,31 +9,31 @@ class AirTanker
 {
 private:
     //初次出动准备时间
-    float readyTime = 0;
+    float readyTime = 25;
     //补给时间
-    float supplyTime = 0;
+    float supplyTime = 10;
     //载荷装载时间
-    float reLoadTime = 0;
+    float reLoadTime = 5;
     //航程
-    float range = 0;
+    float range = 500;
     //航时
-    float endurance = 0;
+    float endurance = 5;
     //燃油容量
-    float fuelCapacity = 0;
+    float fuelCapacity = 2400;
     //当前燃油重量
-    float fuelWeight = 0;
+    float fuelWeight = 2400;
     //燃油消耗率
-    float fuelCost = 0;
+    float fuelCost = 8;
     //载荷重量
-    float loadWeight = 0;
+    float loadWeight = 3000;
     //空投精度
-    float accuracy = 0;
+    float accuracy = 85;
     //有效投放率
-    float effectiveRate = 0;
+    float effectiveRate = 85;
     //巡航速度
-    float cruiseSpeed = 0;
+    float cruiseSpeed = 240;
     //吊桶飞行速度
-    float bucketSpeed = 0;
+    float bucketSpeed = 80;
     //任务总油耗
     float totalFuelCost = 0;
     //飞行器位置
@@ -44,6 +44,8 @@ private:
     //火场指针
     WildFire* wildFire = nullptr;
 
+    //往返架次纪录
+    int flightRec = 0;
     //时间记录：加油时间
     float reFuelTimeRec = 0;
     //时间记录：整备时间
@@ -71,10 +73,20 @@ public:
     //仿真计算步长(min)
     static float timeStep;
 
+    //设置飞机位置
+    inline void SetPosition(Position pos){position = pos;};
+    //设置取水点
+    inline void SetWaterPoint(Position pos){waterPoint = pos;};
+    //设置火场指针
+    inline void SetWildFire(WildFire* fire){wildFire = fire;};
+    //输出架次纪录
+    inline int GetFlightRec(){return flightRec;};
     //设置仿真步长
     inline static void SetTimeStep(float step){timeStep = step;};
 
     //执行仿真计算
     void Update();
+    //输出当前飞机状态
+    std::string StatusDisp();
 
 };

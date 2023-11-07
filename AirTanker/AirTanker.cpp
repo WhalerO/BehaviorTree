@@ -3,6 +3,7 @@
 #include "AirTanker.h"
 
 //=====================================================================================================================
+float AirTanker::timeStep = 1;
 
 //---------------------------------------------------------------------------------------------------------------------
 //执行仿真计算
@@ -37,18 +38,19 @@ void AirTanker::Update()
     //若吊桶中有水，执行吊桶洒水
     if(isWaterLoaded){
         //若抵达火场，执行灭火
-        if(position.inRange(wildFire->fireCenter, 10)){
+        if(position.inRange(wildFire->fireCenter, 0.01)){
             wildFire->curTurnTotalWater += loadWeight;
             isWaterLoaded = false;
+            flightRec++;
         }
         //若未抵达火场，执行吊桶飞行
-        else    position.transToPosition(wildFire->fireCenter, WildFire::timeStep, bucketSpeed);
+        else    position.transToPosition(wildFire->fireCenter, (WildFire::timeStep / 60), bucketSpeed);
     }
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //若吊桶中无水，执行取水
     else{
         //若抵达取水点，执行取水
-        if(position.inRange(waterPoint, 10)){
+        if(position.inRange(waterPoint, 0.01)){
             //若取水未完成，执行取水
             if(loadTimeRec < reLoadTime){
                 loadTimeRec += WildFire::timeStep;
@@ -58,8 +60,26 @@ void AirTanker::Update()
             loadTimeRec = 0;
         }
         //若未抵达取水点，执行飞行
-        else    position.transToPosition(waterPoint, WildFire::timeStep, cruiseSpeed);
+        else    position.transToPosition(waterPoint, (WildFire::timeStep / 60), cruiseSpeed);
+    }
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //油耗计算
+    fuelWeight -= fuelCost * WildFire::timeStep;
+    if(fuelWeight < EPS)    isFuelRemain = false;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+//输出当前飞机状态
+std::string AirTanker::StatusDisp()
+{
+    std::string result;
+
+    if(!isFuelRemain)   result = "正在加油";
+    else if(!isEngaged)  result = "准备中";
+    else{
+        if(isWaterLoaded)   result = "正在灭火";
+        else    result = "正在汲水";
     }
 
-
+    return result;
 }

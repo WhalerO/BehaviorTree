@@ -12,6 +12,7 @@
                 "${fileDirname}\\Test\\*.cpp",
                 "${fileDirname}\\MathBase\\*.cpp",
                 "${fileDirname}\\WildFire\\*.cpp",
+                "${fileDirname}\\AirTanker\\*.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],

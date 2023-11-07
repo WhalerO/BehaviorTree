@@ -46,9 +46,9 @@ float WildFire::FireAreaCal()
     //投水总加仑数计算
     float totalWaterGallon = curTurnTotalWater / 3.7854;
     //有效扑灭面积计算
-    float effectiveArea = totalWaterGallon / GPC / 10.7639;
+    float effectiveArea = totalWaterGallon / GPC / 10.7639 * 100;
     //本轮扑灭火环百分比计算
-    fireSurpressPercent += effectiveArea / burningArea;
+    fireSurpressPercent += effectiveArea / (burningArea + EPS);
     //本轮剩余火环百分比计算
     float fireRemainsPercent = 1 - fireSurpressPercent;
     fireRemainsPercent = max(0, fireRemainsPercent);

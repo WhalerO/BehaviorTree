@@ -8,9 +8,10 @@
 #include "./Test/Engage.h"
 #include "./Test/Return.h"
 #include "./WildFire/WildFire.h"
+#include "./AirTanker/AirTanker.h"
 
 //-----------------------------------------------------------------------------------------------------
-using std::cout; using std::endl;
+using std::cout; using std::endl; using std::string;
 
 //-----------------------------------------------------------------------------------------------------
 int main() 
@@ -104,6 +105,7 @@ int main()
     }
     */
 
+    /*
     //创建火场
     WildFire *fire = new WildFire();
     //设置仿真步长
@@ -115,6 +117,46 @@ int main()
         cout << "火场面积" << fire->GetFireArea() << endl ;
         cout << endl;
     }
+    */
+
+    //创建火场
+    WildFire *fire = new WildFire();
+    //创建灭火机
+    AirTanker *tanker = new AirTanker();
+    //初始火场位置（0，0）
+    Position fireCenter(0, 0);
+    //初始飞机位置（50， 50）
+    Position aircraft(50, 50);
+    //初始取水点位置（10，10）
+    Position waterPoint(10, 10);
+    //设置仿真步长
+    WildFire::SetTimeStep(1);
+    AirTanker::SetTimeStep(1);
+    //设置火场位置
+    fire->SetFireCenter(fireCenter);
+    //设置飞机位置
+    tanker->SetPosition(aircraft);
+    //设置取水点
+    tanker->SetWaterPoint(waterPoint); 
+    //设置火场指针
+    tanker->SetWildFire(fire);
+
+    float timeRec = 1;
+    string tankerSatuation;
+    while(timeRec <= 600 && fire->GetFireSurpressPercent() < 1){
+        tanker->Update();
+        fire->Update();
+        if(timeRec == 1 || tankerSatuation != tanker->StatusDisp()){
+            cout << "第" << timeRec << "分钟" << '\t';
+            cout << "火场面积\t" << fire->GetFireArea() / 1000 << "公顷\t" ;
+            cout << "火环扑灭百分比\t" << 100 * fire->GetFireSurpressPercent() << "%\t" ;
+            cout << tanker->StatusDisp() << endl;
+            tankerSatuation = tanker->StatusDisp();
+        }
+        timeRec += 1;
+    }
+    cout << "共执行往返灭火架次：" << tanker->GetFlightRec() << endl;
+    cout << "消防共耗时：" << timeRec << "分钟" << endl;
 
     return 0;
 }
