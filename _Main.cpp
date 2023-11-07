@@ -7,6 +7,7 @@
 #include "./Test/Search.h"
 #include "./Test/Engage.h"
 #include "./Test/Return.h"
+#include "./WildFire/WildFire.h"
 
 //-----------------------------------------------------------------------------------------------------
 using std::cout; using std::endl;
@@ -55,7 +56,8 @@ int main()
     tree->reset();
     tree->disp();
     */
-
+    
+    /*
     //设置仿真步长
     SyncActionNode::setTimeStep(0.1);
     //搜救出发点、目标点、返回点
@@ -99,6 +101,19 @@ int main()
     while(ret->getStatus() != Success){
         tree->execute();
         tree->disp();
+    }
+    */
+
+    //创建火场
+    WildFire *fire = new WildFire();
+    //设置仿真步长
+    fire->SetTimeStep(1);
+    //逐步仿真至第60分钟
+    for(int i = 0; i < 60; i++){
+        fire->Update();
+        cout << "第" << i << "分钟" << '\t';
+        cout << "火场面积" << fire->GetFireArea() << endl ;
+        cout << endl;
     }
 
     return 0;

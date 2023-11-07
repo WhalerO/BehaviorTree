@@ -11,6 +11,7 @@
                 "${fileDirname}\\BehaviorTree\\*.cpp",
                 "${fileDirname}\\Test\\*.cpp",
                 "${fileDirname}\\MathBase\\*.cpp",
+                "${fileDirname}\\WildFire\\*.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],

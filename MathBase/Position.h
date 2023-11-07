@@ -13,6 +13,9 @@ public:
 
 	void setPosition(int x, int y);
 	float norm() { return sqrt(xPos * xPos + yPos * yPos); }
+
+	bool inRange(Position target, float range = EPS);
+	void transToPosition(Position target, float timeStep, float speed);
 };
 //-------------------------------------------------------------------------
 inline Position operator-(Position p1, Position p2)
