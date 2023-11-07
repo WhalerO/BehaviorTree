@@ -62,11 +62,20 @@ float WildFire::FireAreaCal()
         float burnedEdgeForward = timeStep * fireSpeed;
         burnedArea += fireRemainsPercent * PI * (2 * burnedEdgeForward*burnedRadius + burnedEdgeForward * burnedEdgeForward);
     }
-    //火场总面积计算
-    totalArea = PI * (fireRadius + 0.5 * fireWidth) * (fireRadius + 0.5 * fireWidth);
     //燃烧面积计算
     burningArea = PI * 4 * fireRadius * fireWidth;
+    //火场总面积计算
+    totalArea = burningArea + burnedArea;
     return burningArea;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+//火场平均温度计算
+float WildFire::FireTemperatureCal()
+{
+    //火场平均温度计算
+    fireTemperature = burningTemperature * burningArea / totalArea + smolderingTemperature * (totalArea - burningArea) / totalArea;
+    return fireTemperature;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -139,6 +148,8 @@ void WildFire::Update()
     FireSpeedCal();
     //火场面积计算
     FireAreaCal();
+    //火场平均温度计算
+    FireTemperatureCal();
     //本轮末重初始化
     curTurnTotalWater = 0;
 }

@@ -20,6 +20,10 @@ private:
     float totalArea = 0;
     //火场平均温度
     float fireTemperature = 500;
+    //燃烧温度
+    float burningTemperature = 500;
+    //阴燃温度
+    float smolderingTemperature = 200;
     //火场半径
     float fireRadius = 0;
     //火场环宽度
@@ -61,6 +65,8 @@ private:
     float FireSpeedCal();
     //火场面积计算
     float FireAreaCal();
+    //火场平均温度计算
+    float FireTemperatureCal();
     //飞火概率计算
     float FlyingFireProbCal();
 
@@ -82,6 +88,8 @@ public:
     inline float GetFireArea(){return totalArea;};
     //获得火场面积
     inline float GetFireRadius(){return fireRadius;};
+    //输出火场平均温度
+    inline float GetFireTemperature(){return fireTemperature;};
     //获得扑灭火环百分比
     inline float GetFireSurpressPercent(){return fireSurpressPercent;};
 
