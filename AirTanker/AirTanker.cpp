@@ -40,9 +40,9 @@ void AirTanker::Update()
     if(isWaterLoaded){
         //若抵达火场，执行灭火
         if(position.inRange(wildFire->fireCenter, 0.01)){
-            wildFire->curTurnTotalWater += loadWeight;
+            wildFire->curTurnTotalWater += fleetNum * loadWeight * effectiveRate / 100 * accuracy / 100;
             isWaterLoaded = false;
-            flightRec++;
+            flightRec += fleetNum;
         }
         //若未抵达火场，执行吊桶飞行
         else    position.transToPosition(wildFire->fireCenter, (WildFire::timeStep / 60), bucketSpeed);

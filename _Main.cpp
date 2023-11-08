@@ -1,6 +1,7 @@
 
 //-----------------------------------------------------------------------------------------------------
 #include <iostream>
+#include <fstream>
 
 #include "./BehaviorTree/BehaviorTree.h"
 #include "./Test/TestNode.h"
@@ -12,7 +13,7 @@
 
 //-----------------------------------------------------------------------------------------------------
 using std::cout; using std::endl; using std::string;
-
+using std::ifstream; using std::ofstream;
 //-----------------------------------------------------------------------------------------------------
 int main() 
 {
@@ -119,6 +120,7 @@ int main()
     }
     */
 
+    /*
     //创建火场
     WildFire *fire = new WildFire();
     //创建灭火机
@@ -143,6 +145,8 @@ int main()
 
     float timeRec = 1;
     string tankerSatuation;
+
+    
     while(timeRec <= 600 && fire->GetFireSurpressPercent() < 1){
         tanker->Update();
         fire->Update();
@@ -158,7 +162,105 @@ int main()
     cout << "共执行往返灭火架次：" << tanker->GetFlightRec() << endl;
     cout << "消防共耗时：" << timeRec << "分钟" << endl;
     cout << "加油次数：" << tanker->GetReFuelRec() << endl;
-    //
+    */
+
+    //火场指针
+    WildFire *fire = NULL;
+    //灭火机指针
+    AirTanker *tanker = NULL;
+    //初始火场位置（0，0）
+    Position fireCenter(0, 0);
+    //初始飞机位置（50， 50）
+    Position aircraft(50, 50);
+    //初始取水点位置（10，10）
+    Position waterPoint(10, 10);
+    //设置仿真步长
+    WildFire::SetTimeStep(1);
+    AirTanker::SetTimeStep(1);
+    float timeRec = 1;
+    //文件输出流
+    ofstream fout;
+    remove("result.txt");
+    fout.open("result.txt", std::ios::app);
+
+    //外层循环
+    float paraStart = 120, paraEnd = 360;
+    for(int i = 0; i < 1000; i++){
+        //火场重新初始化
+        delete fire;
+        fire = new WildFire();
+        fire->SetFireCenter(fireCenter);
+        //飞机重新初始化
+        delete tanker;
+        tanker = new AirTanker();
+        tanker->SetPosition(aircraft);
+        tanker->SetWaterPoint(waterPoint);
+        tanker->SetWildFire(fire);
+
+        //=====================================================================================================
+        //单参数循环
+        timeRec = 1;
+        tanker->cruiseSpeed = i / 1000.0 * (paraEnd - paraStart) + paraStart;
+        //执行仿真
+        while(fire->GetFireSurpressPercent() < 1 && timeRec < 600){
+            tanker->Update();
+            fire->Update();
+            timeRec += 1;
+        }
+        cout << "巡航飞行速度：" << tanker->cruiseSpeed << '\t';
+        cout << "扑灭成功率：" << 100 * fire->GetFireSurpressPercent() << "%\t";
+        cout << "总过火面积：" << fire->GetFireArea() / 10000 << "公顷" << endl;
+        fout << tanker->cruiseSpeed << '\t' << timeRec << '\t';
+        fout << fire->GetFireArea() / 10000 << '\t' << tanker->flightRec << endl;
+
+        continue;
+
+        //=====================================================================================================
+        //机群循环
+        timeRec = 1;
+        float fleetNumRec = 1;
+        while(fire->GetFireSurpressPercent() < 1){
+            //判断是否经过600分钟，若是，则重新初始化并增加机群数量
+            if(timeRec > 600){
+                //火场重新初始化
+                delete fire;
+                fire = new WildFire();
+                fire->SetFireCenter(fireCenter);
+                //飞机重新初始化
+                delete tanker;
+                tanker = new AirTanker();
+                tanker->SetPosition(aircraft);
+                tanker->SetWaterPoint(waterPoint);
+                tanker->SetWildFire(fire);
+                //增加机群数量
+                fleetNumRec++;
+                tanker->fleetNum = fleetNumRec;
+                timeRec = 1;
+                continue;
+            }
+            //参数调整
+            while(fire->GetFireArea() / 10000 < i){
+                fire->Update();
+                continue;
+            }
+            //单次循环计算
+            tanker->Update();
+            fire->Update();
+            timeRec += 1;
+            //若机队数量超过100，则跳出
+            if(tanker->fleetNum > 100)    break;
+        }
+        fleetNumRec = 1;
+        cout << "初始火灾规模：" << i << "公顷\t";
+        cout << "消防总耗时：" << timeRec << "分钟" << '\t';
+        cout << "消防总架次：" << tanker->GetFlightRec() << '\t';
+        cout << "出动总架数：" << tanker->fleetNum << '\t';
+        cout << "扑灭成功率：" << 100 * fire->GetFireSurpressPercent() << "%\t";
+        cout << "总过火面积：" << fire->GetFireArea() / 10000 << "公顷" << endl;
+        fout << i << '\t' << timeRec << '\t' << tanker->GetFlightRec() << '\t';
+        fout << tanker->fleetNum << '\t' << fire->GetFireArea() / 10000 << endl;
+    }
+
     return 0;
 }
 

@@ -27,7 +27,7 @@ private:
     //火场半径
     float fireRadius = 0;
     //火场环宽度
-    float fireWidth = 50;
+    float fireWidth = 20;
     //火场中心位置
     Position fireCenter;
     //火场蔓延速度

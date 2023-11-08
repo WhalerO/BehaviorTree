@@ -7,7 +7,8 @@
 //灭火机类
 class AirTanker
 {
-private:
+//private:
+public:
     //初次出动准备时间
     float readyTime = 25;
     //补给时间
@@ -36,6 +37,8 @@ private:
     float bucketSpeed = 80;
     //任务总油耗
     float totalFuelCost = 0;
+    //机群数量
+    int fleetNum = 1;
     //飞行器位置
     Position position;
     //取水点
